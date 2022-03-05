@@ -1,5 +1,11 @@
 import java.util.*;
-
+/**
+ * abstract Shape Class which contain 
+ * nessasary operations related to Shapes
+ * Utility.
+ * 2 abstract method
+ * 2 static method
+ */
 abstract class Shape{
     static String name;
 
@@ -7,11 +13,13 @@ abstract class Shape{
 
     abstract public void takeShapeDetail(Scanner sc);
 
+    // Used To Select Shape from Menu
     public static void chooseShapes(Scanner sc){
-        name=sc.nextLine();
-        System.out.println("You Chossed Shape"+name);
+        name=sc.nextLine().trim();
+        System.out.println("You Chossed Shape : "+name);
     }
-   
+
+    // Providing Shape Objects
     public static Shape provideShape(){
         Shape obj;
            if(name.equalsIgnoreCase("Traingle")){
@@ -49,7 +57,7 @@ class Traingle extends Shape{
 
    public void pAreaTraingle(){
        int area=base*height/2;
-       System.out.println(area);
+       System.out.println("        Area of Traingle :"+area);
    }
 
 }
@@ -59,7 +67,7 @@ class Circle extends Shape{
 
     @Override
     public void takeShapeDetail(Scanner sc){
-       System.out.println("Enter the Radius-:");
+       System.out.println("Enter the Radius-: ");
        this.radius=sc.nextInt();sc.nextLine();
     } 
 
@@ -71,11 +79,11 @@ class Circle extends Shape{
 
     public void pAreaCircle(){
       int area=(int)(Math.PI*this.radius*this.radius);
-      System.out.println("Area of Circle :"+area);
+      System.out.println("        Area of Circle :"+area);
     }
     public void pCircumferenceCircle(){
        int Circumference=(int)(2*Math.PI*this.radius);
-       System.out.println("Area of Circumference :"+Circumference);
+       System.out.println("        Area of Circumference :"+Circumference);
     }  
 }
 
@@ -97,9 +105,16 @@ class Rectangle extends Shape{
 
     public void pAreaRectangle(){
         int area=length*breadth;
-        System.out.println("Area of rectangle is:"+area);
+        System.out.println("        Area of rectangle is:"+area);
     }
 }
+
+/**
+ * ShapesDetailMenu
+ * class Which shows Menu of Shapes
+ * and uses Shape Class for chossing and interacting 
+ * with diffrent shape class
+ */
 
 public class ShapesDetailMenu{
     void  showShapeMenu(){
@@ -109,27 +124,30 @@ public class ShapesDetailMenu{
         System.out.println("3) Triangle");
         System.out.println("4) Square");
         System.out.println("5) Sphere");
-        System.out.println("5) Cylinder");
+        System.out.println("6) Cylinder");
 
      }
 
      void greetingMessage(){
-         System.out.println("Thankyu for Coming............");
+         System.out.println("Thankyu for Comming............");
      }
 
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in);
         ShapesDetailMenu startApp=new ShapesDetailMenu();
-        // String uResponse="";
         do{
             startApp.showShapeMenu();
-            Shape.chooseShapes(sc);
-            Shape eShape= Shape.provideShape();
-            eShape.takeShapeDetail(sc);
-            eShape.printShapeDetail();
-            System.out.println("Do you Want to Continue YES/NO............");
+            try {
+                Shape.chooseShapes(sc);
+                Shape eShape= Shape.provideShape();
+                eShape.takeShapeDetail(sc);
+                eShape.printShapeDetail();
+            } catch (NumberFormatException | NullPointerException e) {
+                 System.out.println("Entered Value is Wrong");
+            }
+            System.out.println("\nDo you Want to Continue YES/NO............");
              
-        }while(! sc.nextLine().equalsIgnoreCase("No"));
+        }while(! sc.nextLine().trim().equalsIgnoreCase("No"));
 
         startApp.greetingMessage();
     }
