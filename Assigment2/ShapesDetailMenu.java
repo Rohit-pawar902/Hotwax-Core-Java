@@ -1,13 +1,15 @@
+import java.util.*;
+
 abstract class Shape{
     static String name;
 
     abstract public void printShapeDetail();
 
-    abstract public void takeInputShapes();
+    abstract public void takeShapeDetail(Scanner sc);
 
     public static void chooseShapes(Scanner sc){
         name=sc.nextLine();
-        System.out.print("You Chossed Shape"+name);
+        System.out.println("You Chossed Shape"+name);
     }
    
     public static Shape provideShape(){
@@ -28,7 +30,78 @@ abstract class Shape{
     } 
 }
 
-class ShapesDetailMenu{
+class Traingle extends Shape{
+   private int base;
+   private int height;
+
+   @Override
+   public void takeShapeDetail(Scanner sc){
+       System.out.println("Enter the base-:");
+       this.base=sc.nextInt();
+       System.out.println("Enter the height-:");
+       this.height=sc.nextInt();sc.nextLine();
+   } 
+
+   @Override
+   public void printShapeDetail(){
+      pAreaTraingle();
+   } 
+
+   public void pAreaTraingle(){
+       int area=base*height/2;
+       System.out.println(area);
+   }
+
+}
+
+class Circle extends Shape{
+    private int radius;
+
+    @Override
+    public void takeShapeDetail(Scanner sc){
+       System.out.println("Enter the Radius-:");
+       this.radius=sc.nextInt();sc.nextLine();
+    } 
+
+    @Override
+    public void printShapeDetail(){
+         pAreaCircle();
+         pCircumferenceCircle();
+    } 
+
+    public void pAreaCircle(){
+      int area=(int)(Math.PI*this.radius*this.radius);
+      System.out.println("Area of Circle :"+area);
+    }
+    public void pCircumferenceCircle(){
+       int Circumference=(int)(2*Math.PI*this.radius);
+       System.out.println("Area of Circumference :"+Circumference);
+    }  
+}
+
+class Rectangle extends Shape{
+    private int length;
+    private int breadth;
+    @Override
+    public void takeShapeDetail(Scanner sc){
+       System.out.println("Enter the length:");
+       this.length=sc.nextInt();
+       System.out.println("Enter the breadth:");
+       this.breadth=sc.nextInt();sc.nextLine();
+    } 
+
+    @Override
+    public void printShapeDetail(){
+      pAreaRectangle();
+    } 
+
+    public void pAreaRectangle(){
+        int area=length*breadth;
+        System.out.println("Area of rectangle is:"+area);
+    }
+}
+
+public class ShapesDetailMenu{
     void  showShapeMenu(){
         System.out.println("Chosse Shape Whose info You Want............");
         System.out.println("1) Circle");
@@ -47,15 +120,16 @@ class ShapesDetailMenu{
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in);
         ShapesDetailMenu startApp=new ShapesDetailMenu();
+        // String uResponse="";
         do{
             startApp.showShapeMenu();
             Shape.chooseShapes(sc);
             Shape eShape= Shape.provideShape();
-            eShape.takeInputShapes();
+            eShape.takeShapeDetail(sc);
             eShape.printShapeDetail();
             System.out.println("Do you Want to Continue YES/NO............");
-            String uResponse=sc.nextLine(); 
-        }while(!uResponse.equalsIgnoreCase("No"));
+             
+        }while(! sc.nextLine().equalsIgnoreCase("No"));
 
         startApp.greetingMessage();
     }
