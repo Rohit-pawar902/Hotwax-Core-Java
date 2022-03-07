@@ -125,6 +125,7 @@ class Rectangle extends Shape{
     @Override
     public void printShapeDetail(){
       pAreaRectangle();
+      pPerimeterRectangle();
     } 
 
     public void pAreaRectangle(){
@@ -137,7 +138,105 @@ class Rectangle extends Shape{
         System.out.println("        Perimeter of rectangle is:"+perimeter);
     }
 
+}
+
+/**
+ * Square class 
+ * which extends Shape class 
+ * and Overiding abstract method
+ * and printing ShapeDetail
+ */
+class Square extends Shape{
+    private int side;
+
+    @Override
+    public void takeShapeDetail(Scanner sc){
+        System.out.println("Enter the side of Square:");
+        this.side=sc.nextInt();sc.nextLine();
+    }
+
+    @Override
+    public void printShapeDetail(){
+      pAreaSquare();
+      pPerimeterSquare();
+    } 
+
+    public void pAreaSquare(){
+       int area=side*side;
+       System.out.println("        Area of square is:"+area);
+    }
+
+    public void pPerimeterSquare(){
+       int perimeter=4*(side);
+       System.out.println("        Perimeter of square is:"+perimeter);
+    }
+}
+
+/**
+ * Sphere class 
+ * which extends Shape class 
+ * and Overiding abstract method
+ * and printing ShapeDetail
+ */
+class Sphere extends Shape{
+    private int radius;
+
+    @Override
+    public void takeShapeDetail(Scanner sc){
+        System.out.println("Enter the radius of Sphere:");
+        this.radius=sc.nextInt();sc.nextLine();
+    }
+
+    @Override
+    public void printShapeDetail(){
+      pAreaSphere();
+      pVolumeSphere();
+    } 
     
+    public void pAreaSphere(){
+        int surfaceArea=(int)(4*Math.PI*radius*radius);
+        System.out.println("        Surface-Area of sphere is: "+surfaceArea);
+    }
+
+    public void pVolumeSphere(){
+        int volume=(int)((4/3)*Math.PI*Math.pow(radius,3));
+        System.out.println("        Volume of sphere is: "+volume);
+    }
+}
+
+/**
+ * Cylinder class 
+ * which extends Shape class 
+ * and Overiding abstract method
+ * and printing ShapeDetail
+ */
+class Cylinder extends Shape{
+    private int radius;
+    private int height;
+
+    @Override
+    public void takeShapeDetail(Scanner sc){
+        System.out.println("Enter the radius of Cylinder:");
+        this.radius=sc.nextInt();
+        System.out.println("Enter the height of Cylinder:");
+        this.height=sc.nextInt();sc.nextLine();
+    }
+
+    @Override
+    public void printShapeDetail(){
+      pAreaCylinder();
+      pVolumeCylinder();
+    } 
+
+    public void pAreaCylinder() {
+        int surfaceArea=(int)((2*Math.PI*radius)*(height+radius));
+        System.out.println("        Surface-Area of Cylinder is: "+surfaceArea);
+    }
+
+    public void pVolumeCylinder() {
+        int volume=(int)(Math.PI*radius*radius*height);
+        System.out.println("        Volume of Cylinder is: "+volume);
+    }
 
 }
 
