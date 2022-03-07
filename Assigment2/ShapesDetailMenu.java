@@ -1,11 +1,13 @@
 import java.util.*;
+
 /**
- * abstract Shape Class which contain 
+ * abstract Shape Class which contains 
  * nessasary operations related to Shapes
  * Utility.
  * 2 abstract method
  * 2 static method
  */
+
 abstract class Shape{
     static String name;
 
@@ -38,6 +40,13 @@ abstract class Shape{
     } 
 }
 
+
+/**
+ * Traingle class 
+ * which extends Shape class 
+ * and Overiding abstract methods
+ * and printing ShapeDetail
+ */
 class Traingle extends Shape{
    private int base;
    private int height;
@@ -56,11 +65,18 @@ class Traingle extends Shape{
    } 
 
    public void pAreaTraingle(){
-       int area=base*height/2;
+       int area=(base*height)/2;
        System.out.println("        Area of Traingle :"+area);
    }
 
 }
+
+/**
+ * Circle class 
+ * which extends Shape class 
+ * and Overiding abstract methods
+ * and printingShapeDetail
+ */
 
 class Circle extends Shape{
     private int radius;
@@ -81,15 +97,23 @@ class Circle extends Shape{
       int area=(int)(Math.PI*this.radius*this.radius);
       System.out.println("        Area of Circle :"+area);
     }
+
     public void pCircumferenceCircle(){
        int Circumference=(int)(2*Math.PI*this.radius);
        System.out.println("        Area of Circumference :"+Circumference);
     }  
 }
 
+/**
+ * Rectangle class 
+ * which extends Shape class 
+ * and Overiding abstract method
+ * and printing ShapeDetail
+ */
 class Rectangle extends Shape{
     private int length;
     private int breadth;
+
     @Override
     public void takeShapeDetail(Scanner sc){
        System.out.println("Enter the length:");
@@ -107,16 +131,25 @@ class Rectangle extends Shape{
         int area=length*breadth;
         System.out.println("        Area of rectangle is:"+area);
     }
+
+    public void pPerimeterRectangle(){
+        int perimeter=2*(length+breadth);
+        System.out.println("        Perimeter of rectangle is:"+perimeter);
+    }
+
+    
+
 }
 
 /**
  * ShapesDetailMenu
- * class Which shows Menu of Shapes
+ * class Which interacts with the User and shows Menu of Shapes
  * and uses Shape Class for chossing and interacting 
  * with diffrent shape class
  */
 
 public class ShapesDetailMenu{
+
     void  showShapeMenu(){
         System.out.println("Chosse Shape Whose info You Want............");
         System.out.println("1) Circle");
@@ -138,10 +171,18 @@ public class ShapesDetailMenu{
         do{
             startApp.showShapeMenu();
             try {
+                // Shape choosen by user here
                 Shape.chooseShapes(sc);
+
+                // Taking instance of Shape according to user choice
                 Shape eShape= Shape.provideShape();
+
+                // taking parameter for Selected Shape
                 eShape.takeShapeDetail(sc);
+
+                // Printing Shape Related operation done on them. 
                 eShape.printShapeDetail();
+
             } catch (NumberFormatException | NullPointerException e) {
                  System.out.println("Entered Value is Wrong");
             }
