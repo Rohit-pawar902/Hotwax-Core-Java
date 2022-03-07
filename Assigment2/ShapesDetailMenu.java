@@ -33,6 +33,15 @@ abstract class Shape{
            else if(name.equalsIgnoreCase("Rectangle")){
               obj=new Rectangle();
            }
+            else if(name.equalsIgnoreCase("Square")){
+              obj=new Square();
+           }
+            else if(name.equalsIgnoreCase("Sphere")){
+              obj=new Sphere();
+           }
+            else if(name.equalsIgnoreCase("Cylinder")){
+              obj=new Cylinder();
+           } 
            else{
                obj=null;
            }
