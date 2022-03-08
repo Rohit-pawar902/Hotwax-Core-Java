@@ -70,7 +70,7 @@ class EmployeeManagement{
     public void showMenu(){
         System.out.println("Choose/Enter Operation id to perform.....");
         System.out.println("1).Add an Employee");
-        System.out.println("2).Delete an Employee");
+        System.out.println("2).Delete an Employee by ID");
         System.out.println("3).Search an Employee");
         System.out.println("4).Update an Employee by its ID");
         System.out.println("5).exit");
@@ -124,8 +124,17 @@ class EmployeeManagement{
         return false;
     }
 
-    public void delete(){
-
+    public void delete(Scanner sc){
+        System.out.println("Enter the ID of Employee to delete it :");
+        int deleteId=sc.nextInt();sc.nextLine();
+        if(this.empList.containsKey(deleteId)){
+            this.empList.remove(deleteId);
+            System.out.println("Deletion done");
+            this.changeStatus=true;
+        }
+        else{
+            System.out.println("Deletion Not done Invalid ID");
+        }
     }
 
     public void search() {
@@ -148,8 +157,8 @@ class EmployeeManagement{
         }
 
         try {
-            empFile.close();
-            saveEmp.close();
+            if(empFile!=null)empFile.close();
+            if(saveEmp!=null)saveEmp.close();
         } catch (Exception e) {
             //TODO: handle exception
             e.printStackTrace();
@@ -167,7 +176,7 @@ class EmployeeManagement{
            switch (Choice) {
                case 1:employeeManager.add(sc);
                     break;
-               case 2:employeeManager.delete();
+               case 2:employeeManager.delete(sc);
                     break;
                case 3:employeeManager.search();
                     break;
