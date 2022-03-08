@@ -55,7 +55,7 @@ class Employee{
    
      @Override
     public String toString() {
-        return "Employee{" + "uid=" + uid + ", name=" + name + ", emailAddress=" + emailAddress + ", age=" + age + ", Dob=" + Dob + '}';
+        return "{" + "uid = " + uid + ", name = " + name + ", emailAddress = " + emailAddress + ", age = " + age + ", Dob = " + Dob + '}';
     }
 
 
