@@ -1,0 +1,307 @@
+import java.io.*;
+import java.util.*;
+
+/**
+ * EmployeeManagement class
+ * empList - stores the all data of employee from emp.csv
+ * empFile - BufferedReader instance used to read data from .csv
+ * latestIdAllocated - which initially set to last id allocated to employee
+ * location - represents file location initialized in constructor
+ * saveEmp - used to save data in file .csv
+ * changeStatus - it used to detect is there any changes made in data by add/delete/update operation
+ */
+class EmployeeManagement{
+    private HashMap<Integer,Employee> empList;
+    private BufferedReader empFile;
+    private int latestIdAllocated;
+    private File location;
+    private BufferedWriter saveEmp;
+    private boolean changeStatus; 
+
+    EmployeeManagement(){
+        changeStatus=false;
+        location=new File("./emp.csv");
+        getAllEmployeeData();
+        showAllEmployee();
+    }
+
+    /**Feaching all data from file and Storing in a empList DS */
+    public void getAllEmployeeData(){
+        this.empList=new HashMap<>();
+        this.latestIdAllocated=0;
+        try {
+            // connecting with file
+            FileReader fr=new FileReader(this.location);
+            // class instance
+            this.empFile=new BufferedReader(fr);
+
+            // started reading empdata
+            String empData=this.empFile.readLine(); 
+            while(empData!=null){
+                Employee tempEmp=getEmployeeByString(empData);
+                empList.put(tempEmp.getUid() , tempEmp);
+    
+                
+                this.latestIdAllocated=Math.max(this.latestIdAllocated,tempEmp.getUid());
+                // reading
+                empData=this.empFile.readLine();
+            }
+
+        } catch (Exception e) {
+             e.printStackTrace();
+        }
+        
+    }
+
+    /**Just converting String data into an Employee object */
+    private Employee getEmployeeByString(String tEmployee){
+        String empField[]=tEmployee.split(",");
+        int id=Integer.parseInt(empField[0]);
+        int age=Integer.parseInt(empField[3]);
+        Employee newEmp=new Employee(id,empField[1],empField[2],age,empField[4]);
+        return newEmp;
+    }
+    
+    /**Showing all Employee detail stored in CSV file */
+    public void showAllEmployee(){
+        System.out.println("All Employee Detail are showed here.....\n");
+        for(Employee temp:empList.values()){
+            System.out.println(temp);
+        }
+        System.out.println("");
+    }
+    
+    /**Showing menu for interaction */
+    public void showMenu(){
+        System.out.println("Choose/Enter Operation id to perform.....");
+        System.out.println("1).Add an Employee");
+        System.out.println("2).Delete an Employee by ID");
+        System.out.println("3).Search an Employee by ID");
+        System.out.println("4).Update an Employee by its ID");
+        System.out.println("5).short data of Employee and then see it");
+        System.out.println("6).exit");
+    }
+
+    /**Add opertion using this method to take input from user*/
+    public Employee takeInputEmployeeData(Scanner sc) {
+        int id =latestIdAllocated+1;
+        System.out.println("Enter the Employee Name : ");
+        String name=sc.nextLine();
+        System.out.println("Enter the Employee Email :");
+        String email=sc.nextLine();
+        System.out.println("Enter the Employee Age :");
+        int age=sc.nextInt();sc.nextLine();
+        System.out.println("Enter the Employee Date :");
+        String date=sc.nextLine();
+        String csvFormate=""+id+","+name+","+email+","+age+","+date+",";
+        return getEmployeeByString(csvFormate);
+    }
+
+    public void add(Scanner sc) {
+        Employee insertedEmp =takeInputEmployeeData(sc);
+        // locally storing employee into hashmap
+        this.empList.put(insertedEmp.getUid(),insertedEmp);
+        
+        this.changeStatus=true;
+        latestIdAllocated++;
+    }
+
+    /**
+     * It updates the file emp.csv file when add/delete/update
+     * operation apply by user it is detected by changeStatus
+     */
+    private boolean updateEmployeeFile(){
+        // connecting with writer
+        try {
+            this.saveEmp=new BufferedWriter(new FileWriter(this.location));
+            // push all data into the file because some changes is detected
+            String data="";
+            for(Employee emp:empList.values()){
+                String csvFormate=""+emp.getUid()+","+emp.getName()+","+emp.getEmailAddress()+","+emp.getAge()+","+emp.getDob()+",";
+                data=data+csvFormate+"\n";
+            }
+            this.saveEmp.write(data);
+            this.saveEmp.flush();
+            return true;     
+        } catch (Exception e) {
+            //TODO: handle exception
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public void delete(Scanner sc){
+        System.out.println("Enter the ID of Employee to delete it :");
+        int deleteId=sc.nextInt();sc.nextLine();
+        if(this.empList.containsKey(deleteId)){
+            this.empList.remove(deleteId);
+            System.out.println("Deletion done");
+            this.changeStatus=true;
+        }
+        else{
+            System.out.println("Deletion Not done Invalid ID");
+        }
+    }
+
+    public void search(Scanner sc) {
+        System.out.println("Enter the id of the Employee");
+        int searchId=sc.nextInt();sc.nextLine();
+        if(this.empList.containsKey(searchId)){
+           System.out.println(this.empList.get(searchId).toString());
+           System.out.println("");
+        }
+        else{
+            System.out.println("Searching Not Possible there is no Employee with given ID");
+        }
+    }
+
+    public void update(Scanner sc) {
+        System.out.println("Enter the ID of Employee to Update it :");
+        int updateId=sc.nextInt();sc.nextLine();
+        if(this.empList.containsKey(updateId)){
+            Employee updated=takeInputEmployeeData(sc);
+            // update the employee
+            this.empList.put(updateId,updated);
+            this.changeStatus=true;
+             System.out.println("Update Done...\n");
+        }
+        else{
+            System.out.println("Update Not done Invalid ID");
+        }
+    }
+    
+    public void sortEmployee(Scanner sc){
+        System.out.println("Enter the Field(id,name,age,email) by which you have  to applying sorting");
+        // it may be id,name,age,email
+        String field=sc.nextLine().trim();
+        System.out.println("Ascending/Desending");
+        String sort=sc.nextLine(); 
+        ArrayList<Employee> stored=new ArrayList<>();
+        for(Employee emp:this.empList.values()){
+            stored.add(emp);
+        }
+        if(field.equalsIgnoreCase("id")){
+            
+            Collections.sort(stored,(e1,e2)->{
+                if(sort.equalsIgnoreCase("Ascending")){
+                    return e1.getUid()-e2.getUid();
+                }
+                else{
+                     return e2.getUid()-e1.getUid();
+                }
+            });
+            printArrayList(stored);
+
+        }
+        else if(field.equalsIgnoreCase("name")){
+
+            Collections.sort(stored,(e1,e2)->{
+                if(sort.equalsIgnoreCase("Ascending")){
+                    return e1.getName().compareTo(e2.getName());
+                }
+                else{
+                     return e2.getName().compareTo(e1.getName());
+                }
+            });
+            printArrayList(stored);
+
+        }
+        else if(field.equalsIgnoreCase("age")){
+
+            Collections.sort(stored,(e1,e2)->{
+                if(sort.equalsIgnoreCase("Ascending")){
+                    return e1.getAge()-e2.getAge();
+                }
+                else{
+                     return e2.getAge()-e1.getAge();
+                }
+            });
+            printArrayList(stored);
+
+        }
+        else if(field.equalsIgnoreCase("email")){
+
+            Collections.sort(stored,(e1,e2)->{
+                if(sort.equalsIgnoreCase("Ascending")){
+                    return e1.getEmailAddress().compareTo(e2.getEmailAddress());
+                }
+                else{
+                    return e2.getEmailAddress().compareTo(e1.getEmailAddress());
+                }
+            });
+            printArrayList(stored);
+
+        }
+        else{
+            System.out.println("Wrong Field Choosen plz try again...");
+        }
+
+        
+    }
+
+    private void printArrayList(ArrayList<Employee> arr){
+        System.out.println("ID\t\t"+"Name\t\t\t"+"Email\t\t\t"+"Age\t"+"DOB\t");
+        for(Employee e:arr){
+            // System.out.println(""+e.getUid()+"\t"+e.getName()+"\t"+e.getEmailAddress()+"\t"+e.getAge()+"\t"+e.getDob());
+            System.out.printf("%10d  %15s  %30s  %3d  %10s \n",e.getUid(),e.getName(),e.getEmailAddress(),e.getAge(),e.getDob());
+        }
+        System.out.println();
+        System.out.println("Done...");
+    }
+
+
+    public void saveAndFreeAllResourses(){
+        // if true then push all data so that changes got persisted into the file
+        if(this.changeStatus){
+            if(updateEmployeeFile()){
+                System.out.println("Changes done...");
+            }
+            else{
+                System.out.println("No Changes...");
+            }
+        }
+
+        try {
+            if(empFile!=null)empFile.close();
+            if(saveEmp!=null)saveEmp.close();
+        } catch (Exception e) {
+            //TODO: handle exception
+            e.printStackTrace();
+        }
+        System.out.println("Thankyu Come Again.....");
+        
+    }
+
+    public static void main(String[] args)throws Exception {
+        Scanner sc=new Scanner(System.in);
+        EmployeeManagement employeeManager=new EmployeeManagement();
+        while(true){
+           employeeManager.showMenu();
+           int Choice=sc.nextInt();sc.nextLine();
+           switch (Choice) {
+               case 1:employeeManager.add(sc);
+                      employeeManager.showAllEmployee();
+                    break;
+               case 2:employeeManager.delete(sc);
+                      employeeManager.showAllEmployee();
+                    break;
+               case 3:employeeManager.search(sc);
+                    break;
+               case 4:employeeManager.update(sc);
+                      employeeManager.showAllEmployee();
+                    break;
+               case 5:employeeManager.sortEmployee(sc);
+                    break;  
+               case 6:employeeManager.saveAndFreeAllResourses();
+                      employeeManager.showAllEmployee();
+                      System.exit(0);
+                    break;                                    
+               default:System.out.println("You entered Wrong Choice plz enter right choice");
+                   continue;
+           }
+           
+        }
+    }
+
+}
+
