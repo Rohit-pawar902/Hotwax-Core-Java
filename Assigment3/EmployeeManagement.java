@@ -64,6 +64,7 @@ class EmployeeManagement{
         for(Employee temp:empList.values()){
             System.out.println(temp);
         }
+        System.out.println("");
     }
     
     /**Showing menu for interaction */
@@ -141,8 +142,19 @@ class EmployeeManagement{
         
     }
 
-    public void update() {
-        
+    public void update(Scanner sc) {
+        System.out.println("Enter the ID of Employee to Update it :");
+        int updateId=sc.nextInt();sc.nextLine();
+        if(this.empList.containsKey(updateId)){
+            Employee updated=takeInputEmployeeData(sc);
+            // update the employee
+            this.empList.put(updateId,updated);
+            this.changeStatus=true;
+             System.out.println("Update Done...\n");
+        }
+        else{
+            System.out.println("Update Not done Invalid ID");
+        }
     }
 
     public void saveAndFreeAllResourses(){
@@ -175,15 +187,20 @@ class EmployeeManagement{
            int Choice=sc.nextInt();sc.nextLine();
            switch (Choice) {
                case 1:employeeManager.add(sc);
+                      employeeManager.showAllEmployee();
                     break;
                case 2:employeeManager.delete(sc);
+                      employeeManager.showAllEmployee();
                     break;
                case 3:employeeManager.search();
+                      employeeManager.showAllEmployee();
                     break;
-               case 4:employeeManager.update();
+               case 4:employeeManager.update(sc);
+                      employeeManager.showAllEmployee();
                     break;
                case 5:employeeManager.saveAndFreeAllResourses();
-                    System.exit(0);
+                      employeeManager.showAllEmployee();
+                      System.exit(0);
                     break;                                    
                default:System.out.println("You entered Wrong Choice plz enter right choice");
                    continue;
