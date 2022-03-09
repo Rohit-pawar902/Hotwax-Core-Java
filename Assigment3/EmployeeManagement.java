@@ -78,7 +78,8 @@ class EmployeeManagement{
         System.out.println("2).Delete an Employee by ID");
         System.out.println("3).Search an Employee by ID");
         System.out.println("4).Update an Employee by its ID");
-        System.out.println("5).exit");
+        System.out.println("5).short data of Employee and then see it");
+        System.out.println("6).exit");
     }
 
     /**Add opertion using this method to take input from user*/
@@ -168,6 +169,86 @@ class EmployeeManagement{
             System.out.println("Update Not done Invalid ID");
         }
     }
+    
+    public void sortEmployee(Scanner sc){
+        System.out.println("Enter the Field(id,name,age,email) by which you have  to applying sorting");
+        // it may be id,name,age,email
+        String field=sc.nextLine().trim();
+        System.out.println("Ascending/Desending");
+        String sort=sc.nextLine(); 
+        ArrayList<Employee> stored=new ArrayList<>();
+        for(Employee emp:this.empList.values()){
+            stored.add(emp);
+        }
+        if(field.equalsIgnoreCase("id")){
+            
+            Collections.sort(stored,(e1,e2)->{
+                if(sort.equalsIgnoreCase("Ascending")){
+                    return e1.getUid()-e2.getUid();
+                }
+                else{
+                     return e2.getUid()-e1.getUid();
+                }
+            });
+            printArrayList(stored);
+
+        }
+        else if(field.equalsIgnoreCase("name")){
+
+            Collections.sort(stored,(e1,e2)->{
+                if(sort.equalsIgnoreCase("Ascending")){
+                    return e1.getName().compareTo(e2.getName());
+                }
+                else{
+                     return e2.getName().compareTo(e1.getName());
+                }
+            });
+            printArrayList(stored);
+
+        }
+        else if(field.equalsIgnoreCase("age")){
+
+            Collections.sort(stored,(e1,e2)->{
+                if(sort.equalsIgnoreCase("Ascending")){
+                    return e1.getAge()-e2.getAge();
+                }
+                else{
+                     return e2.getAge()-e1.getAge();
+                }
+            });
+            printArrayList(stored);
+
+        }
+        else if(field.equalsIgnoreCase("email")){
+
+            Collections.sort(stored,(e1,e2)->{
+                if(sort.equalsIgnoreCase("Ascending")){
+                    return e1.getEmailAddress().compareTo(e2.getEmailAddress());
+                }
+                else{
+                    return e2.getEmailAddress().compareTo(e1.getEmailAddress());
+                }
+            });
+            printArrayList(stored);
+
+        }
+        else{
+            System.out.println("Wrong Field Choosen plz try again...");
+        }
+
+        
+    }
+
+    private void printArrayList(ArrayList<Employee> arr){
+        System.out.println("ID\t\t"+"Name\t\t\t"+"Email\t\t\t"+"Age\t"+"DOB\t");
+        for(Employee e:arr){
+            // System.out.println(""+e.getUid()+"\t"+e.getName()+"\t"+e.getEmailAddress()+"\t"+e.getAge()+"\t"+e.getDob());
+            System.out.printf("%10d  %15s  %30s  %3d  %10s \n",e.getUid(),e.getName(),e.getEmailAddress(),e.getAge(),e.getDob());
+        }
+        System.out.println();
+        System.out.println("Done...");
+    }
+
 
     public void saveAndFreeAllResourses(){
         // if true then push all data so that changes got persisted into the file
@@ -209,7 +290,9 @@ class EmployeeManagement{
                case 4:employeeManager.update(sc);
                       employeeManager.showAllEmployee();
                     break;
-               case 5:employeeManager.saveAndFreeAllResourses();
+               case 5:employeeManager.sortEmployee(sc);
+                    break;  
+               case 6:employeeManager.saveAndFreeAllResourses();
                       employeeManager.showAllEmployee();
                       System.exit(0);
                     break;                                    
