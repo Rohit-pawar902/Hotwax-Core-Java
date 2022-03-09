@@ -8,13 +8,22 @@ class Account{
     }
 
     public void withdraw(int amount){
+        String s=Thread.currentThread().getName();
+        System.out.println(s+" :came...");
         if(amount>this.balance){
-            System.out.println("insufficent balance withdraw not possible"+this.balance);
+            System.out.println(s+" :You have insufficent balance withdraw not possible"+this.balance);
             return;
         }
-        
-        System.out.println(amount +" amount is withdraw from your Account");
-        this.balance -= amount;
+        else{
+            System.out.println(s+" :You have Sufficient Balance to withdraw"+this.balance);
+            try{Thread.sleep(1000);}catch(Exception e){}
+            System.out.println(s+" :"+amount +" amount is withdraw from your Account");
+            this.balance =this.balance - amount;
+            if(this.balance<0){
+                System.out.println(s+"Incosistent State");
+            }
+        }
+        System.out.println(s+" :Remaining balance"+this.balance);
     }
     
 }
