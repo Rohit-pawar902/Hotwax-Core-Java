@@ -28,6 +28,7 @@ class EmployeeManagement{
     /**Feaching all data from file and Storing in a empList DS */
     public void getAllEmployeeData(){
         this.empList=new HashMap<>();
+        this.latestIdAllocated=0;
         try {
             // connecting with file
             FileReader fr=new FileReader(this.location);
@@ -39,7 +40,10 @@ class EmployeeManagement{
             while(empData!=null){
                 Employee tempEmp=getEmployeeByString(empData);
                 empList.put(tempEmp.getUid() , tempEmp);
-                this.latestIdAllocated=tempEmp.getUid();
+    
+                
+                this.latestIdAllocated=Math.max(this.latestIdAllocated,tempEmp.getUid());
+                // reading
                 empData=this.empFile.readLine();
             }
 
@@ -72,7 +76,7 @@ class EmployeeManagement{
         System.out.println("Choose/Enter Operation id to perform.....");
         System.out.println("1).Add an Employee");
         System.out.println("2).Delete an Employee by ID");
-        System.out.println("3).Search an Employee");
+        System.out.println("3).Search an Employee by ID");
         System.out.println("4).Update an Employee by its ID");
         System.out.println("5).exit");
     }
@@ -80,7 +84,7 @@ class EmployeeManagement{
     /**Add opertion using this method to take input from user*/
     public Employee takeInputEmployeeData(Scanner sc) {
         int id =latestIdAllocated+1;
-        System.out.println("Enter the Employee Name :");
+        System.out.println("Enter the Employee Name : ");
         String name=sc.nextLine();
         System.out.println("Enter the Employee Email :");
         String email=sc.nextLine();
@@ -138,8 +142,16 @@ class EmployeeManagement{
         }
     }
 
-    public void search() {
-        
+    public void search(Scanner sc) {
+        System.out.println("Enter the id of the Employee");
+        int searchId=sc.nextInt();sc.nextLine();
+        if(this.empList.containsKey(searchId)){
+           System.out.println(this.empList.get(searchId).toString());
+           System.out.println("");
+        }
+        else{
+            System.out.println("Searching Not Possible there is no Employee with given ID");
+        }
     }
 
     public void update(Scanner sc) {
@@ -192,8 +204,7 @@ class EmployeeManagement{
                case 2:employeeManager.delete(sc);
                       employeeManager.showAllEmployee();
                     break;
-               case 3:employeeManager.search();
-                      employeeManager.showAllEmployee();
+               case 3:employeeManager.search(sc);
                     break;
                case 4:employeeManager.update(sc);
                       employeeManager.showAllEmployee();
