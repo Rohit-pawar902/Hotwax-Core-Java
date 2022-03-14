@@ -25,7 +25,7 @@ class Account{
         System.out.println(s +" :Remaining balance" + this.balance);
     }
 
-    Syncronized public void safeWithdraw(int amount){
+     synchronized public void safeWithdraw(int amount){
         String s=Thread.currentThread().getName();
         System.out.println(s +" :came...");
         if(amount>this.balance){
